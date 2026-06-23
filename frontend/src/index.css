@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --color-primary: #0f6cbd;
+    --color-primary-foreground: #f8fbff;
+    --color-background: #f3f7fb;
+    --color-foreground: #10243f;
+    --color-card: #ffffff;
+    --color-card-foreground: #10243f;
+    --color-secondary: #e7eef7;
+    --color-secondary-foreground: #163351;
+    --color-muted: #edf3f9;
+    --color-muted-foreground: #5f738c;
+    --color-accent: #dbe9f7;
+    --color-border: #d9e4f0;
+    --color-input: #d9e4f0;
+    --color-ring: #7da9d6;
+    --color-destructive: #ef4444;
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    --radius-3xl: 1.75rem;
+    --radius-full: 9999px;
+  }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at top left, rgba(15, 108, 189, 0.16), transparent 28%),
+      radial-gradient(circle at top right, rgba(66, 184, 131, 0.12), transparent 24%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(243, 247, 251, 0.96));
+  }
+  ::selection {
+    background: rgba(15, 108, 189, 0.2);
+  }
+}
