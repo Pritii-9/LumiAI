@@ -28,6 +28,20 @@
     --radius-3xl: 1.75rem;
     --radius-full: 9999px;
   }
+
+  .dark {
+    --color-background: #020617;
+    --color-foreground: #f8fafc;
+    --color-card: #0f172a;
+    --color-card-foreground: #f8fafc;
+    --color-secondary: #1e293b;
+    --color-secondary-foreground: #f1f5f9;
+    --color-muted: #1e293b;
+    --color-muted-foreground: #94a3b8;
+    --color-border: #334155;
+    --color-input: #334155;
+    --color-ring: #0f6cbd;
+  }
 }
 
 @layer base {
@@ -43,10 +57,22 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     min-height: 100vh;
+  }
+  
+  /* Only apply light gradient in light mode */
+  :root:not(.dark) body {
     background-image:
       radial-gradient(circle at top left, rgba(15, 108, 189, 0.16), transparent 28%),
       radial-gradient(circle at top right, rgba(66, 184, 131, 0.12), transparent 24%),
       linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(243, 247, 251, 0.96));
+  }
+  
+  /* Apply dark gradient in dark mode */
+  .dark body {
+    background-image:
+      radial-gradient(circle at top left, rgba(15, 108, 189, 0.15), transparent 28%),
+      radial-gradient(circle at top right, rgba(66, 184, 131, 0.08), transparent 24%),
+      linear-gradient(180deg, rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.96));
   }
   ::selection {
     background: rgba(15, 108, 189, 0.2);
