@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
     "build": "tsc --skipLibCheck",
+    "prestart": "tsc --skipLibCheck",
     "start": "node dist/server.js",
     "start:ts": "ts-node src/server.ts"
   },
