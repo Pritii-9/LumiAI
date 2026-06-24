@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { Clock, Info, Loader2, Video } from 'lucide-react';
 import { InterviewDataContext } from '@/context/InterviewDataContext';
 import type { Interview } from '@/types';
-import axios from 'axios';
+import api from '@/lib/api';
 
 export default function InterviewJoinPage() {
   const { interview_id } = useParams<{ interview_id: string }>();
@@ -23,7 +23,7 @@ export default function InterviewJoinPage() {
   const fetchInterview = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get<Interview>(`/api/interviews/${interview_id}`);
+      const { data } = await api.get<Interview>(`/api/interviews/${interview_id}`);
       setInterviewData(data);
     } catch {
       toast.error('Interview not found. Please check the link.');

@@ -4,7 +4,7 @@ import { useUser } from '@/context/UserContext';
 import type { Interview } from '@/types';
 import { getAverageRating, formatUtcDate } from '@/lib/utils';
 import { Loader2, CheckCircle2, XCircle, Star } from 'lucide-react';
-import axios from 'axios';
+import api from '@/lib/api';
 
 export default function InterviewDetailsPage() {
   const { interview_id } = useParams<{ interview_id: string }>();
@@ -20,7 +20,7 @@ export default function InterviewDetailsPage() {
   const fetchDetails = async () => {
     setLoading(true); setError(null);
     try {
-      const { data } = await axios.get<Interview>(`/api/interviews/${interview_id}`);
+      const { data } = await api.get<Interview>(`/api/interviews/${interview_id}`);
       setInterviewDetail(data);
     } catch (err: any) {
       setError(err?.response?.data?.error || 'Failed to load interview details.');

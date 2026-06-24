@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '@/lib/api';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,7 +27,7 @@ export default function QuestionList({ formData, onCreateLink }: QuestionListPro
   const generateQuestions = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post('/api/ai/generate-questions', formData);
+      const { data } = await api.post('/api/ai/generate-questions', formData);
       const parsed = extractJsonPayload(data.content);
       setQuestionList(parsed?.interviewQuestions || []);
       if (data.warning) toast.warning(data.warning);
@@ -43,7 +43,7 @@ export default function QuestionList({ formData, onCreateLink }: QuestionListPro
     setSavedLoading(true);
     const interview_id = uuidv4();
     try {
-      const { data } = await axios.post('/api/interviews', {
+      const { data } = await api.post('/api/interviews', {
         ...formData,
         questionList,
         userEmail: user?.email,

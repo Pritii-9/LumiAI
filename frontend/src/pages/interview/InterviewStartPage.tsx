@@ -5,7 +5,7 @@ import { AlertCircle, Loader2, Mic, MicOff, Phone, Timer } from 'lucide-react';
 import { toast } from 'sonner';
 import { extractJsonPayload } from '@/lib/utils';
 import type { ConversationEntry } from '@/types';
-import axios from 'axios';
+import api from '@/lib/api';
 
 export default function InterviewStartPage() {
   const { interviewInfo } = useContext(InterviewDataContext);
@@ -162,10 +162,10 @@ export default function InterviewStartPage() {
     setLoading(true);
     try {
       const conversation = JSON.stringify(conversationEntries);
-      const result = await axios.post('/api/ai/generate-feedback', { conversation });
+      const result = await api.post('/api/ai/generate-feedback', { conversation });
       const feedbackJson = extractJsonPayload(result.data.content);
 
-      await axios.post('/api/feedback', {
+      await api.post('/api/feedback', {
         interview_id,
         userName: interviewInfo?.userName,
         userEmail: interviewInfo?.userEmail,

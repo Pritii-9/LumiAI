@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import api from '@/lib/api';
 import type { Interview } from '@/types';
 import { useUser } from '@/context/UserContext';
 
@@ -26,7 +26,7 @@ export const useInterviewList = (options: UseInterviewListOptions = {}) => {
     try {
       const params: Record<string, string | number> = { userEmail: user.email };
       if (options.limit) params.limit = options.limit;
-      const { data } = await axios.get<Interview[]>('/api/interviews', { params });
+      const { data } = await api.get<Interview[]>('/api/interviews', { params });
       setInterviewList(data);
     } catch (err: any) {
       setError(err?.response?.data?.error || 'Failed to load interviews.');
