@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CheckCircle2, Sparkles, Users, ArrowRight, Zap, Shield, ExternalLink, Globe, Link2 } from 'lucide-react';
+import { CheckCircle2, Sparkles, ArrowRight, Zap, Shield, ExternalLink, Globe, Link2 } from 'lucide-react';
 
 const SOCIAL_ICONS = [ExternalLink, Globe, Link2];
 

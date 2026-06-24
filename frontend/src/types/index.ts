@@ -4,6 +4,7 @@ export interface InterviewQuestion {
 }
 
 export interface FeedbackRating {
+  [key: string]: number;
   technicalSkills: number;
   communication: number;
   problemSolving: number;

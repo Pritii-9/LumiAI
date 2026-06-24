@@ -1,4 +1,4 @@
-import { WalletCards, CheckCircle2, Zap, CreditCard, Shield } from 'lucide-react';
+import { CheckCircle2, Zap, CreditCard, Shield } from 'lucide-react';
 
 export default function BillingPage() {
   return (

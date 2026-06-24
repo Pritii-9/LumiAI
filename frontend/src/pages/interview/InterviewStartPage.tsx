@@ -12,7 +12,7 @@ export default function InterviewStartPage() {
   const { interview_id } = useParams<{ interview_id: string }>();
   const navigate = useNavigate();
 
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<any>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [callDuration, setCallDuration] = useState(0);

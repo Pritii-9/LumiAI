@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Settings, User as UserIcon, Bell, Shield, Key } from 'lucide-react';
+import { User as UserIcon, Bell, Shield, Key } from 'lucide-react';
 import { useUser } from '@/context/UserContext';
 import { toast } from 'sonner';
 
