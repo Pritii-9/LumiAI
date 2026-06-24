@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
+import OTP from '../models/OTP';
+import { sendEmail } from '../utils/sendEmail';
 
 const generateToken = (id: string) => {
   return jwt.sign({ id }, process.env.JWT_SECRET || 'fallback_secret', {
@@ -9,12 +11,59 @@ const generateToken = (id: string) => {
   });
 };
 
+export const sendOTP = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      res.status(400).json({ error: 'Please provide an email.' });
+      return;
+    }
+
+    // Generate a 6 digit numeric OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Remove any existing OTPs for this email to avoid duplicates
+    await OTP.deleteMany({ email });
+
+    // Save the new OTP
+    await OTP.create({ email, otp });
+
+    // Send the email
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 10px;">
+        <h2 style="color: #0f6cbd; text-align: center;">LumiAI Verification</h2>
+        <p style="color: #334155; font-size: 16px;">Hello,</p>
+        <p style="color: #334155; font-size: 16px;">Please use the following 6-digit code to verify your account. This code is valid for 5 minutes.</p>
+        <div style="background-color: #f8fafc; padding: 15px; text-align: center; border-radius: 8px; margin: 20px 0;">
+          <h1 style="color: #0f6cbd; letter-spacing: 5px; margin: 0;">${otp}</h1>
+        </div>
+        <p style="color: #64748b; font-size: 14px; text-align: center;">If you didn't request this code, please ignore this email.</p>
+      </div>
+    `;
+
+    await sendEmail(email, 'Your LumiAI Verification Code', html, otp);
+
+    res.status(200).json({ message: 'OTP sent successfully.' });
+  } catch (error) {
+    console.error('Send OTP Error:', error);
+    res.status(500).json({ error: 'Failed to send OTP email.' });
+  }
+};
+
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, otp } = req.body;
 
-    if (!name || !email || !password) {
-      res.status(400).json({ error: 'Please provide all fields.' });
+    if (!name || !email || !password || !otp) {
+      res.status(400).json({ error: 'Please provide all fields, including OTP.' });
+      return;
+    }
+
+    // Verify OTP
+    const validOTP = await OTP.findOne({ email, otp });
+    if (!validOTP) {
+      res.status(400).json({ error: 'Invalid or expired OTP.' });
       return;
     }
 

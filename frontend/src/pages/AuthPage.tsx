@@ -60,10 +60,25 @@ export default function AuthPage() {
       return;
     }
     setLoading(true);
-    await delay(1200); // Simulate OTP sending
-    setLoading(false);
-    toast.success(`OTP sent securely to ${email}`);
-    setMode('signup_otp');
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() })
+      });
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send OTP');
+      }
+
+      toast.success(`OTP successfully sent! (Check your backend terminal console for the code)`, { duration: 8000 });
+      setMode('signup_otp');
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSignupVerifyOTP = async (e: React.FormEvent) => {
@@ -74,15 +89,12 @@ export default function AuthPage() {
     }
     setLoading(true);
     
-    // Simulate OTP validation delay
-    await delay(1000); 
-
     try {
-      // Actually register the user in the database
+      // Actually register the user in the database with the OTP
       const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.trim(), email: email.trim(), password: password.trim() })
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), password: password.trim(), otp: otp.trim() })
       });
       const data = await response.json();
       
@@ -110,7 +122,7 @@ export default function AuthPage() {
     setLoading(true);
     await delay(1000); // Simulate sending reset OTP
     setLoading(false);
-    toast.success(`Password reset OTP sent to ${email}`);
+    toast.success(`Reset OTP sent! For this demo, use 123456.`, { duration: 6000 });
     setMode('reset_otp');
   };
 
@@ -218,6 +230,7 @@ export default function AuthPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
+                    autoComplete="current-password"
                     className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-10 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
                     required
                   />
@@ -291,6 +304,7 @@ export default function AuthPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="At least 8 characters"
+                    autoComplete="new-password"
                     className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-10 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
                     required
                     minLength={8}
@@ -422,6 +436,7 @@ export default function AuthPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="At least 8 characters"
+                    autoComplete="new-password"
                     className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-10 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
                     required
                     minLength={8}
