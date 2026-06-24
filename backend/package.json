@@ -5,8 +5,9 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js"
+    "build": "tsc --skipLibCheck",
+    "start": "node dist/server.js",
+    "start:ts": "ts-node src/server.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
