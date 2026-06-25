@@ -39,23 +39,36 @@ export default function InterviewStartPage() {
 
     const recognition = new SpeechRecognition();
     recognition.lang = 'en-US';
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
     recognition.onstart = () => { setIsListening(true); setCallError(''); };
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      const transcript = Array.from(event.results).map((r) => r[0]?.transcript || '').join(' ').trim();
-      setCurrentTranscript(transcript);
-      const latest = event.results[event.results.length - 1];
-      if (latest?.isFinal && transcript) submitAnswer(transcript);
+      let interim = '';
+      let final = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          final += event.results[i][0].transcript;
+        } else {
+          interim += event.results[i][0].transcript;
+        }
+      }
+      setCurrentTranscript(interim);
+      if (final) {
+        setManualAnswer((prev) => prev ? prev + ' ' + final.trim() : final.trim());
+      }
     };
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
-      setIsListening(false);
       if (event.error === 'not-allowed') { setMicAvailable(false); setCallError('Microphone permission denied. Use typed answers.'); return; }
-      if (event.error !== 'aborted') setCallError('Speech recognition failed. Try again or type your response.');
+      if (event.error !== 'aborted' && event.error !== 'no-speech') {
+        setCallError('Speech recognition stopped. Click Listen to resume.');
+      }
     };
-    recognition.onend = () => setIsListening(false);
+    recognition.onend = () => {
+      setIsListening(false);
+      setCurrentTranscript('');
+    };
     recognitionRef.current = recognition;
     return () => { recognition.stop(); recognitionRef.current = null; };
   }, []);
@@ -85,7 +98,6 @@ export default function InterviewStartPage() {
 
   const startListening = () => {
     if (!recognitionRef.current) { setCallError('Speech recognition not available.'); return; }
-    setCurrentTranscript('');
     try { recognitionRef.current.start(); } catch {}
   };
 
@@ -231,18 +243,23 @@ export default function InterviewStartPage() {
             </p>
           </div>
           <div className="space-y-3">
-            <div className="rounded-2xl bg-slate-50 p-4">
-              <p className="text-sm font-medium text-slate-700">Captured answer</p>
-              <p className="mt-2 min-h-12 text-sm text-slate-600">{currentTranscript || 'Your answer will appear here.'}</p>
-            </div>
+            {isListening && (
+              <div className="rounded-2xl bg-slate-50 p-4">
+                <p className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Listening...
+                </p>
+                <p className="mt-2 min-h-6 text-sm text-slate-600 italic">{currentTranscript || 'Speak now...'}</p>
+              </div>
+            )}
             <textarea
               value={manualAnswer}
               onChange={(e) => setManualAnswer(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitAnswer(manualAnswer); } }}
-              className="min-h-20 w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20"
-              placeholder="Type your answer here..."
+              className="min-h-32 w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20"
+              placeholder="Your answer will appear here as you speak. You can also type or edit it before submitting..."
             />
-            <p className="text-xs text-slate-400">Press Enter to submit typed answer.</p>
+            <p className="text-xs text-slate-400">Review your answer above, then click Submit Answer when you're done.</p>
           </div>
         </div>
       </div>
