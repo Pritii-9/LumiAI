@@ -53,6 +53,7 @@ export interface InterviewFormData {
   jobDescription?: string;
   duration?: string;
   type?: string[];
+  resumeFile?: File;
 }
 
 export interface ConversationEntry {

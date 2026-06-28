@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import PageHeader from '@/components/PageHeader';
 import { useUser } from '@/context/UserContext';
 import { useInterviewList } from '@/hooks/useInterviewList';
 import InterviewCard from '@/components/dashboard/InterviewCard';
@@ -19,19 +20,20 @@ export default function ScheduledInterviewPage() {
   }, [interviewList, searchTerm]);
 
   return (
-    <div className="mt-5">
-      <div className="mb-5 flex flex-col gap-4 rounded-[32px] border border-slate-200 bg-slate-50 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Interview List with Candidate Data</h2>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">Review each session's details, open status, and candidate-ready link.</p>
-        </div>
+    <div className="page-enter mt-5">
+      <PageHeader
+        title="Scheduled Interviews"
+        subtitle="Review each session's details, open status, and candidate-ready link."
+        backTo="/dashboard"
+        backLabel="Back to Dashboard"
+      >
         <div className="flex flex-wrap items-center gap-3">
           <span className="rounded-full bg-white px-4 py-2 text-sm text-slate-700 shadow-sm dark:bg-slate-800 dark:text-slate-300">Total sessions: {stats.totalInterviews}</span>
-          <button onClick={refresh} className="flex h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 hover:bg-slate-50 transition dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">
+          <button onClick={refresh} className="flex h-11 items-center gap-2 rounded-xl btn-ghost px-4 text-sm font-medium">
             <RefreshCw className="h-4 w-4" /> Refresh
           </button>
         </div>
-      </div>
+      </PageHeader>
 
       <div className="mb-5 max-w-md">
         <div className="relative">

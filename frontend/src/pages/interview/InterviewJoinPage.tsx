@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Clock, Info, Loader2, Video } from 'lucide-react';
+import { Clock, Info, Loader2, Video, ArrowLeft } from 'lucide-react';
 import { InterviewDataContext } from '@/context/InterviewDataContext';
 import type { Interview } from '@/types';
 import api from '@/lib/api';
@@ -57,39 +57,47 @@ export default function InterviewJoinPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="flex flex-col items-center justify-center rounded-[28px] border border-slate-200 bg-white p-6 shadow-lg sm:p-8 lg:px-20 xl:px-28">
+    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 relative page-enter">
+      <button 
+        onClick={() => navigate(-1)}
+        className="absolute left-4 top-4 sm:left-6 sm:top-6 flex h-10 w-10 items-center justify-center rounded-xl btn-ghost shadow-sm z-10"
+        title="Back"
+      >
+        <ArrowLeft className="h-5 w-5" />
+      </button>
+
+      <div className="mt-8 flex flex-col items-center justify-center rounded-[28px] card shadow-lg p-6 sm:p-8 lg:px-20 xl:px-28">
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0f6cbd] text-xl font-black text-white mb-3">AI</div>
-        <h2 className="mt-3 text-center text-sm font-medium uppercase tracking-[0.24em] text-slate-500">AI-Powered Interview Platform</h2>
+        <h2 className="mt-3 text-center text-sm font-medium uppercase tracking-[0.24em] page-subtitle">AI-Powered Interview Platform</h2>
         <Video className="my-6 h-24 w-24 text-[#0f6cbd]/30" />
-        <h2 className="text-center text-2xl font-bold text-slate-900">{interviewData?.jobPosition}</h2>
-        <h2 className="mt-2 flex items-center gap-2 text-slate-500">
+        <h2 className="text-center text-2xl font-bold page-title">{interviewData?.jobPosition}</h2>
+        <h2 className="mt-2 flex items-center gap-2 page-subtitle">
           <Clock className="h-4 w-4" /> {interviewData?.duration}
         </h2>
 
         <div className="mt-6 grid w-full gap-4 md:grid-cols-2">
           <div>
-            <p className="mb-2 text-sm font-medium text-slate-700">Enter your full name</p>
+            <p className="mb-2 text-sm font-medium label">Enter your full name</p>
             <input
               placeholder="e.g. Lisa Watson"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20"
+              className="h-11 w-full rounded-xl input px-4 text-sm"
             />
           </div>
           <div>
-            <p className="mb-2 text-sm font-medium text-slate-700">Enter your email</p>
+            <p className="mb-2 text-sm font-medium label">Enter your email</p>
             <input
               placeholder="e.g. lisa@gmail.com"
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}
               type="email"
-              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20"
+              className="h-11 w-full rounded-xl input px-4 text-sm"
             />
           </div>
         </div>
 
-        <div className="mt-6 flex w-full flex-col gap-2 rounded-2xl bg-blue-50 p-4">
+        <div className="mt-6 flex w-full flex-col gap-2 rounded-2xl bg-blue-50 dark:bg-[#0f6cbd]/10 border border-blue-100 dark:border-[#0f6cbd]/20 p-4">
           <div className="flex items-center gap-2">
             <Info className="text-[#0f6cbd]" />
             <p className="font-bold">Before you begin</p>

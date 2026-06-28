@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { User as UserIcon, Bell, Shield, Key } from 'lucide-react';
+import PageHeader from '@/components/PageHeader';
 import { useUser } from '@/context/UserContext';
 import { toast } from 'sonner';
 
@@ -39,11 +40,13 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="mx-auto max-w-5xl py-8">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Settings</h2>
-        <p className="mt-2 text-slate-600 dark:text-slate-400">Manage your account preferences and application settings.</p>
-      </div>
+    <div className="page-enter mx-auto max-w-4xl py-8">
+      <PageHeader
+        title="Account Settings"
+        subtitle="Manage your personal information, security, and notification preferences."
+        backTo="/dashboard"
+        backLabel="Back to Dashboard"
+      />
 
       <div className="grid gap-8 lg:grid-cols-[250px_1fr]">
         {/* Navigation Sidebar */}

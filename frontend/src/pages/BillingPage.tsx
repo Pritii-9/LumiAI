@@ -1,12 +1,15 @@
 import { CheckCircle2, Zap, CreditCard, Shield } from 'lucide-react';
+import PageHeader from '@/components/PageHeader';
 
 export default function BillingPage() {
   return (
-    <div className="mx-auto max-w-5xl py-8">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Billing & Subscription</h2>
-        <p className="mt-2 text-slate-600 dark:text-slate-400">Manage your subscription, billing history, and payment methods.</p>
-      </div>
+    <div className="page-enter mx-auto max-w-5xl py-8">
+      <PageHeader
+        title="Billing & Subscription"
+        subtitle="Manage your subscription, billing history, and payment methods."
+        backTo="/dashboard"
+        backLabel="Back to Dashboard"
+      />
 
       <div className="grid gap-8 lg:grid-cols-[1fr_350px]">
         <div className="space-y-8">

@@ -180,6 +180,14 @@ export default function AuthPage() {
       <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-blue-400/20 blur-[100px]" />
       <div className="absolute bottom-[-10%] right-[-10%] h-[500px] w-[500px] rounded-full bg-emerald-400/10 blur-[100px]" />
 
+      <button 
+        onClick={() => navigate('/')}
+        className="absolute left-4 top-4 sm:left-6 sm:top-6 flex h-10 w-10 items-center justify-center rounded-xl btn-ghost shadow-sm bg-white/50 dark:bg-slate-900/50 backdrop-blur-md z-20"
+        title="Back to Home"
+      >
+        <ArrowLeft className="h-5 w-5" />
+      </button>
+
       <div className="w-full max-w-[420px] relative z-10">
         <div className="rounded-[32px] border border-white dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 p-8 shadow-2xl backdrop-blur-xl transition-all duration-300 ease-in-out">
           
@@ -187,6 +195,7 @@ export default function AuthPage() {
             <button 
               onClick={() => setMode(mode === 'signup_otp' ? 'signup_details' : 'signin')}
               className="absolute left-6 top-6 rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition"
+              title="Back"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
@@ -206,7 +215,7 @@ export default function AuthPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-4 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
+                    className="h-11 w-full pl-10 pr-4 input shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-600"
                     required
                   />
                 </div>
@@ -231,7 +240,7 @@ export default function AuthPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     autoComplete="current-password"
-                    className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-10 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
+                    className="h-11 w-full pl-10 pr-10 input shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-600"
                     required
                   />
                   <button
@@ -274,7 +283,7 @@ export default function AuthPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Sarah Connor"
-                    className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-4 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
+                    className="h-11 w-full pl-10 pr-4 input shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-600"
                     required
                   />
                 </div>
@@ -289,7 +298,7 @@ export default function AuthPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-4 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
+                    className="h-11 w-full pl-10 pr-4 input shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-600"
                     required
                   />
                 </div>
@@ -305,7 +314,7 @@ export default function AuthPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="At least 8 characters"
                     autoComplete="new-password"
-                    className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-10 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
+                    className="h-11 w-full pl-10 pr-10 input shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-600"
                     required
                     minLength={8}
                   />
@@ -349,7 +358,7 @@ export default function AuthPage() {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
                     placeholder="000000"
-                    className="h-12 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-4 text-center text-xl tracking-[0.5em] font-mono outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
+                    className="h-12 w-full pl-10 pr-4 input text-center text-xl tracking-[0.5em] font-mono shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-600"
                     required
                   />
                 </div>
@@ -385,7 +394,7 @@ export default function AuthPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-4 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
+                    className="h-11 w-full pl-10 pr-4 input shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-600"
                     required
                   />
                 </div>
@@ -421,7 +430,7 @@ export default function AuthPage() {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
                     placeholder="000000"
-                    className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-4 tracking-widest text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
+                    className="h-11 w-full pl-10 pr-4 input tracking-widest shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-600"
                     required
                   />
                 </div>
@@ -437,7 +446,7 @@ export default function AuthPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="At least 8 characters"
                     autoComplete="new-password"
-                    className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 dark:text-slate-100 pl-10 pr-10 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600"
+                    className="h-11 w-full pl-10 pr-10 input shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-600"
                     required
                     minLength={8}
                   />

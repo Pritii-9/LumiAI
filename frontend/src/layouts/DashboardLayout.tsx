@@ -11,6 +11,7 @@ export default function DashboardLayout() {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showSignoutModal, setShowSignoutModal] = useState(false);
 
   useEffect(() => {
     if (!user?.email) {
@@ -23,7 +24,7 @@ export default function DashboardLayout() {
     setIsSidebarOpen(false);
   }, [location.pathname]);
 
-  const handleLogout = () => {
+  const confirmLogout = () => {
     setUser(null);
     navigate('/auth', { replace: true });
   };
@@ -130,7 +131,7 @@ export default function DashboardLayout() {
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
             <button
-              onClick={handleLogout}
+              onClick={() => setShowSignoutModal(true)}
               className="flex h-11 items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 sm:px-5 text-sm font-semibold text-red-600 shadow-sm transition hover:bg-red-100 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
             >
               <LogOut className="h-4 w-4 shrink-0" />
@@ -144,6 +145,35 @@ export default function DashboardLayout() {
           <Outlet />
         </div>
       </main>
+
+      {/* Sign Out Modal */}
+      {showSignoutModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-sm rounded-[28px] card p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-500/10 mb-5">
+              <LogOut className="h-6 w-6 text-red-600 dark:text-red-400" />
+            </div>
+            <h3 className="text-center text-xl font-bold page-title">Sign Out</h3>
+            <p className="mt-2 text-center text-sm page-subtitle leading-relaxed">
+              Are you sure you want to log out? You will need to sign in again to access your interview workspace.
+            </p>
+            <div className="mt-6 flex flex-col gap-3">
+              <button 
+                onClick={confirmLogout}
+                className="w-full rounded-xl bg-red-600 px-4 py-3 text-sm font-bold text-white shadow-md shadow-red-500/20 hover:bg-red-700 transition-all active:scale-[0.98]"
+              >
+                Yes, log out
+              </button>
+              <button 
+                onClick={() => setShowSignoutModal(false)}
+                className="w-full rounded-xl btn-ghost px-4 py-3 text-sm font-bold active:scale-[0.98]"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

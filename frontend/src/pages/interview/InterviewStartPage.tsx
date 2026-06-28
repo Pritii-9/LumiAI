@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { InterviewDataContext } from '@/context/InterviewDataContext';
-import { AlertCircle, Loader2, Mic, MicOff, Phone, Timer } from 'lucide-react';
+import { AlertCircle, ArrowLeft, Loader2, Mic, MicOff, Phone, Timer } from 'lucide-react';
 import { toast } from 'sonner';
 import { extractJsonPayload } from '@/lib/utils';
 import type { ConversationEntry } from '@/types';
@@ -199,10 +199,24 @@ export default function InterviewStartPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <h2 className="flex flex-col gap-3 text-xl font-bold text-slate-900 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 page-enter">
+      <div className="mb-4">
+        <button 
+          onClick={() => {
+            if (window.confirm("Are you sure you want to exit the interview session?")) {
+              navigate(-1);
+            }
+          }}
+          className="flex h-10 w-10 items-center justify-center rounded-xl btn-ghost shadow-sm"
+          title="Exit Interview"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+      </div>
+
+      <h2 className="flex flex-col gap-3 text-xl font-bold page-title sm:flex-row sm:items-center sm:justify-between">
         AI Interview Session
-        <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-base shadow-sm">
+        <span className="inline-flex items-center gap-2 rounded-full card shadow-sm px-4 py-2 text-base page-title">
           <Timer className="h-4 w-4" /> {formatTime(callDuration)}
         </span>
       </h2>
@@ -216,20 +230,20 @@ export default function InterviewStartPage() {
 
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
         {/* AI Interviewer */}
-        <div className="flex h-[360px] flex-col items-center justify-center gap-4 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="flex h-[360px] flex-col items-center justify-center gap-4 rounded-[28px] card shadow-sm p-6">
           <div className="relative">
             {interviewerSpeaking && <span className="absolute inset-0 rounded-full bg-blue-500 opacity-75 animate-ping" />}
             <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-[#0f6cbd] text-2xl font-black text-white">AI</div>
           </div>
-          <h2 className="font-semibold">AI Recruiter</h2>
-          <p className="text-center text-sm text-slate-500">
+          <h2 className="font-semibold page-title">AI Recruiter</h2>
+          <p className="text-center text-sm page-subtitle">
             {followUpActive ? followUpQuestion : currentQuestionIndex >= 0 ? questionList[currentQuestionIndex]?.question : 'Your interview will begin when you press start.'}
           </p>
           {followUpActive && <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">Follow-up question</span>}
         </div>
 
         {/* Candidate */}
-        <div className="flex h-[360px] flex-col justify-between rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="flex h-[360px] flex-col justify-between rounded-[28px] card shadow-sm p-6">
           <div className="flex flex-col items-center gap-3">
             <div className="relative">
               {isListening && <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-75 animate-ping" />}
@@ -237,29 +251,29 @@ export default function InterviewStartPage() {
                 {interviewInfo?.userName?.[0]}
               </div>
             </div>
-            <h2 className="font-semibold">{interviewInfo?.userName}</h2>
-            <p className="text-center text-sm text-slate-500">
+            <h2 className="font-semibold page-title">{interviewInfo?.userName}</h2>
+            <p className="text-center text-sm page-subtitle">
               {isListening ? 'Listening to your answer...' : browserSupported && micAvailable ? 'Ready for your response.' : 'Use the text box below.'}
             </p>
           </div>
           <div className="space-y-3">
             {isListening && (
-              <div className="rounded-2xl bg-slate-50 p-4">
-                <p className="text-sm font-medium text-slate-700 flex items-center gap-2">
+              <div className="rounded-2xl card-muted p-4">
+                <p className="text-sm font-medium label flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
                   Listening...
                 </p>
-                <p className="mt-2 min-h-6 text-sm text-slate-600 italic">{currentTranscript || 'Speak now...'}</p>
+                <p className="mt-2 min-h-6 text-sm page-subtitle italic">{currentTranscript || 'Speak now...'}</p>
               </div>
             )}
             <textarea
               value={manualAnswer}
               onChange={(e) => setManualAnswer(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitAnswer(manualAnswer); } }}
-              className="min-h-32 w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:border-[#0f6cbd] focus:ring-2 focus:ring-[#0f6cbd]/20"
+              className="min-h-32 w-full rounded-2xl input p-3 text-sm"
               placeholder="Your answer will appear here as you speak. You can also type or edit it before submitting..."
             />
-            <p className="text-xs text-slate-400">Review your answer above, then click Submit Answer when you're done.</p>
+            <p className="text-xs page-subtitle">Review your answer above, then click Submit Answer when you're done.</p>
           </div>
         </div>
       </div>
