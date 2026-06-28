@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
 interface PageHeaderProps {
@@ -15,7 +15,6 @@ interface PageHeaderProps {
  */
 export default function PageHeader({ title, subtitle, backTo, backLabel = 'Back', children }: PageHeaderProps) {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleBack = () => {
     if (backTo) {

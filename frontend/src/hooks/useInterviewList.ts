@@ -54,7 +54,7 @@ export const useInterviewList = (options: UseInterviewListOptions = {}) => {
     const allFeedbacks = allInterviews.flatMap((i) => i.interviewFeedback || []);
     const totalCandidates = allFeedbacks.length;
     const scores = allFeedbacks
-      .map((fb) => getAverageRating(fb.feedback?.feedback?.rating || fb.feedback?.rating || {}))
+      .map((fb) => getAverageRating(fb.feedback?.feedback?.rating || (fb.feedback as any)?.rating || {}))
       .filter((s) => s > 0);
     const avgScore = scores.length ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10 : 0;
     const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
