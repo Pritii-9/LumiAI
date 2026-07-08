@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import Groq from 'groq-sdk';
 const pdfModule = require('pdf-parse');
 import { generateFallbackInterviewQuestions } from '../utils/aiFallback';
-import { QUESTION_PROMPT, FEEDBACK_PROMPT, RESUME_PARSE_PROMPT } from '../utils/constants';
+import { QUESTION_PROMPT, FEEDBACK_PROMPT, RESUME_PARSE_PROMPT, REPLY_PROMPT } from '../utils/constants';
 
 // Primary model: fast + high quality. Fallback: smaller but still great.
 const PRIMARY_MODEL = 'llama-3.3-70b-versatile';
@@ -241,5 +241,49 @@ export const parseResume = async (req: Request, res: Response): Promise<void> =>
   } catch (error: any) {
     console.error('Error parsing resume with Groq:', error?.message);
     res.status(500).json({ error: 'Failed to extract resume insights.' });
+  }
+};
+
+// POST /api/ai/generate-reply
+export const generateReply = async (req: Request, res: Response): Promise<void> => {
+  const { question, answer, nextQuestion } = req.body;
+
+  if (!question || !answer) {
+    res.status(400).json({ error: 'question and answer are required.' });
+    return;
+  }
+
+  const finalPrompt = REPLY_PROMPT
+    .replace('{{question}}', question)
+    .replace('{{answer}}', answer)
+    .replace('{{nextQuestion}}', nextQuestion || 'DONE');
+
+  const groq = getGroqClient();
+  if (!groq) {
+    res.json({ replyText: `Got it. Let's move on to the next question: ${nextQuestion}` });
+    return;
+  }
+
+  try {
+    const completion = await groq.chat.completions.create({
+      model: PRIMARY_MODEL,
+      messages: [
+        {
+          role: 'system',
+          content: 'You are an expert technical interviewer. Respond with valid JSON only.',
+        },
+        { role: 'user', content: finalPrompt },
+      ],
+      temperature: 0.5,
+      max_tokens: 256,
+      response_format: { type: 'json_object' },
+    });
+
+    const raw = completion.choices[0]?.message?.content ?? '{}';
+    const parsed = JSON.parse(extractJson(raw));
+    res.json({ replyText: parsed.replyText || (nextQuestion ? `Okay. ${nextQuestion}` : 'Okay, that concludes our interview.') });
+  } catch (error: any) {
+    console.error('Error generating reply with Groq:', error?.message);
+    res.json({ replyText: nextQuestion ? `Okay. ${nextQuestion}` : 'Okay, that concludes our interview.' });
   }
 };

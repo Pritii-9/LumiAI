@@ -125,23 +125,16 @@ export default function InterviewStartPage() {
     speakText(intro, () => askQuestion(0));
   };
 
-  const submitAnswer = (answerText: string) => {
+  const submitAnswer = async (answerText: string) => {
     const trimmed = answerText?.trim();
     if (!trimmed) return;
     stopListening();
+    setInterviewerSpeaking(true); // Lock UI while generating reply
 
     const question = followUpActive ? followUpQuestion : questionList[currentQuestionIndex]?.question || 'Question';
     setConversationEntries((prev) => [...prev, { question, answer: trimmed, followUp: followUpActive }]);
 
-    if (followUpActive) {
-      setFollowUpActive(false); setFollowUpQuestion('');
-      const next = currentQuestionIndex + 1;
-      if (next >= questionList.length) { finishInterview(); return; }
-      setTimeout(() => askQuestion(next), 500);
-      return;
-    }
-
-    if (isUnableAnswer(trimmed)) {
+    if (isUnableAnswer(trimmed) && !followUpActive) {
       const followUpText = `Thanks for your honesty. Can you describe one step you'd take to improve? Based on: "${question}"`;
       setFollowUpActive(true); setFollowUpQuestion(followUpText);
       setCurrentTranscript(''); setManualAnswer('');
@@ -150,8 +143,31 @@ export default function InterviewStartPage() {
     }
 
     const next = currentQuestionIndex + 1;
-    if (next >= questionList.length) { finishInterview(); return; }
-    setTimeout(() => askQuestion(next), 500);
+    const nextQuestionText = next < questionList.length ? questionList[next].question : 'DONE';
+
+    try {
+      const res = await api.post('/api/ai/generate-reply', {
+        question,
+        answer: trimmed,
+        nextQuestion: nextQuestionText === 'DONE' ? '' : nextQuestionText
+      });
+      
+      setFollowUpActive(false); setFollowUpQuestion('');
+      
+      if (next >= questionList.length) { 
+         speakText(res.data.replyText || "Okay, that concludes our interview.", () => finishInterview()); 
+         return; 
+      }
+      
+      setCurrentQuestionIndex(next);
+      setCurrentTranscript(''); setManualAnswer('');
+      speakText(res.data.replyText, () => { if (browserSupported && micAvailable) startListening(); });
+    } catch (err) {
+      console.error('Error generating reply:', err);
+      setFollowUpActive(false); setFollowUpQuestion('');
+      if (next >= questionList.length) { finishInterview(); return; }
+      setTimeout(() => askQuestion(next), 500);
+    }
   };
 
   const finishInterview = () => {

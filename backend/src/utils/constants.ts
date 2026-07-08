@@ -61,3 +61,17 @@ Extract and respond with valid JSON in this exact shape:
   "yearsOfExperience": "e.g. 3+ years or Fresher"
 }`;
 
+export const REPLY_PROMPT = `You are an expert technical interviewer.
+The candidate was asked: "{{question}}"
+The candidate answered: "{{answer}}"
+The next question to ask is: "{{nextQuestion}}"
+
+Your task: Provide a brief, human-like transitional response (1-2 short sentences).
+Acknowledge or validate their answer briefly (if it's good, say something positive; if off, gently pivot).
+Then seamlessly ask the next question.
+If the next question is "DONE", just wrap up the interview gracefully.
+
+Respond with valid JSON only in this exact shape:
+{
+  "replyText": "Your full response here..."
+}`;

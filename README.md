@@ -4,6 +4,8 @@
 
 LumiAI is a full-stack AI-powered interview preparation platform. Paste any job description, take an AI-guided interview session, and receive instant, detailed feedback on your technical depth and communication — all in one clean workspace.
 
+> 🌐 **Live Demo:** [https://lumi-ai-amber.vercel.app/](https://lumi-ai-amber.vercel.app/)
+
 ---
 
 ## ✨ Features
@@ -33,59 +35,7 @@ LumiAI is a full-stack AI-powered interview preparation platform. Paste any job 
 | AI | Groq API (with fallback generator) |
 | Dev | ts-node + nodemon |
 
----
 
-## 📁 Project Structure
-
-```
-LumiAI/
-├── frontend/                        # Vite + React + TypeScript
-│   └── src/
-│       ├── components/
-│       │   ├── create-interview/    # Form, question list, interview link
-│       │   └── dashboard/          # Cards, welcome header, interview list
-│       ├── context/                 # UserContext, InterviewDataContext
-│       ├── hooks/                   # useInterviewList
-│       ├── layouts/                 # DashboardLayout (responsive sidebar)
-│       ├── lib/                     # Utility functions & nav constants
-│       ├── pages/
-│       │   ├── LandingPage.tsx      # Premium SaaS landing page
-│       │   ├── AuthPage.tsx         # Sign in / Sign up / OTP verification
-│       │   ├── dashboard/           # Main dashboard & create interview flow
-│       │   ├── interview/           # Join, start, and complete interview pages
-│       │   ├── scheduled/           # Interview details & candidate view
-│       │   ├── AllInterviewPage.tsx
-│       │   ├── ScheduledInterviewPage.tsx
-│       │   ├── SettingsPage.tsx
-│       │   └── BillingPage.tsx
-│       └── types/                   # Shared TypeScript interfaces
-│
-└── backend/                         # Express + Mongoose + TypeScript
-    └── src/
-        ├── config/
-        │   └── db.ts                # MongoDB connection
-        ├── controllers/
-        │   ├── authController.ts    # Register, login, OTP send/verify
-        │   ├── interviewController.ts
-        │   ├── feedbackController.ts
-        │   └── aiController.ts
-        ├── models/
-        │   ├── User.ts              # User schema (bcrypt hashed password)
-        │   ├── OTP.ts               # OTP schema (5 min TTL expiry)
-        │   └── Interview.ts
-        ├── routes/
-        │   ├── authRoutes.ts
-        │   ├── interviewRoutes.ts
-        │   ├── feedbackRoutes.ts
-        │   └── aiRoutes.ts
-        ├── utils/
-        │   ├── sendEmail.ts         # Nodemailer email sender
-        │   ├── constants.ts         # AI prompts
-        │   └── aiFallback.ts        # Fallback question generator
-        └── server.ts                # Express app entry point
-```
-
----
 
 ## 🚀 Getting Started
 
