@@ -281,9 +281,15 @@ export const generateReply = async (req: Request, res: Response): Promise<void> 
 
     const raw = completion.choices[0]?.message?.content ?? '{}';
     const parsed = JSON.parse(extractJson(raw));
-    res.json({ replyText: parsed.replyText || (nextQuestion ? `Okay. ${nextQuestion}` : 'Okay, that concludes our interview.') });
+    res.json({ 
+      replyText: parsed.replyText || (nextQuestion ? `Okay. ${nextQuestion}` : 'Okay, that concludes our interview.'),
+      isFollowUp: parsed.isFollowUp || false
+    });
   } catch (error: any) {
     console.error('Error generating reply with Groq:', error?.message);
-    res.json({ replyText: nextQuestion ? `Okay. ${nextQuestion}` : 'Okay, that concludes our interview.' });
+    res.json({ 
+      replyText: nextQuestion ? `Okay. ${nextQuestion}` : 'Okay, that concludes our interview.',
+      isFollowUp: false 
+    });
   }
 };

@@ -152,16 +152,26 @@ export default function InterviewStartPage() {
         nextQuestion: nextQuestionText === 'DONE' ? '' : nextQuestionText
       });
       
+      const { replyText, isFollowUp } = res.data;
+
+      if (isFollowUp) {
+        setFollowUpActive(true); 
+        setFollowUpQuestion(replyText);
+        setCurrentTranscript(''); setManualAnswer('');
+        speakText(replyText, () => { if (browserSupported && micAvailable) startListening(); });
+        return;
+      }
+      
       setFollowUpActive(false); setFollowUpQuestion('');
       
       if (next >= questionList.length) { 
-         speakText(res.data.replyText || "Okay, that concludes our interview.", () => finishInterview()); 
+         speakText(replyText || "Okay, that concludes our interview.", () => finishInterview()); 
          return; 
       }
       
       setCurrentQuestionIndex(next);
       setCurrentTranscript(''); setManualAnswer('');
-      speakText(res.data.replyText, () => { if (browserSupported && micAvailable) startListening(); });
+      speakText(replyText, () => { if (browserSupported && micAvailable) startListening(); });
     } catch (err) {
       console.error('Error generating reply:', err);
       setFollowUpActive(false); setFollowUpQuestion('');
