@@ -43,7 +43,9 @@ export default function AuthPage() {
       }
 
       setUser({ name: data.name, email: data.email });
-      // Optionally store token: localStorage.setItem('token', data.token);
+      if (data.token) {
+        localStorage.setItem('ai-prep-token', data.token);
+      }
       toast.success('Welcome back!');
       navigate('/dashboard', { replace: true });
     } catch (error: any) {
@@ -103,7 +105,9 @@ export default function AuthPage() {
       }
 
       setUser({ name: data.name, email: data.email });
-      // Optionally store token: localStorage.setItem('token', data.token);
+      if (data.token) {
+        localStorage.setItem('ai-prep-token', data.token);
+      }
       toast.success('Account verified and created successfully!');
       navigate('/dashboard', { replace: true });
     } catch (error: any) {

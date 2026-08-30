@@ -26,6 +26,7 @@ export default function DashboardLayout() {
 
   const confirmLogout = () => {
     setUser(null);
+    localStorage.removeItem('ai-prep-token');
     navigate('/auth', { replace: true });
   };
 
