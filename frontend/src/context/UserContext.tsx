@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { User } from '@/types';
 
@@ -13,18 +13,15 @@ export const UserDetailContext = createContext<UserContextType>({
 });
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUserState] = useState<User | null>(null);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('ai-prep-user');
-    if (saved) {
-      try {
-        setUserState(JSON.parse(saved));
-      } catch {
-        localStorage.removeItem('ai-prep-user');
-      }
+  const [user, setUserState] = useState<User | null>(() => {
+    try {
+      const saved = localStorage.getItem('ai-prep-user');
+      return saved ? (JSON.parse(saved) as User) : null;
+    } catch {
+      localStorage.removeItem('ai-prep-user');
+      return null;
     }
-  }, []);
+  });
 
   const setUser = (u: User | null) => {
     setUserState(u);
